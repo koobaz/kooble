@@ -1,0 +1,13 @@
+[package]
+name = "kooble"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+cliclack = "0.5.7"
+reqwest = "0.13.5"
+scraper = "0.29.0"
+serde_json = "1.0.154"
+spider = "2.53.9"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+url = "2.5.8"
