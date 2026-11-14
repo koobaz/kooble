@@ -10,4 +10,5 @@ scraper = "0.29.0"
 serde_json = "1.0.154"
 spider = "2.53.9"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+ureq = "3.5.2"
 url = "2.5.8"
