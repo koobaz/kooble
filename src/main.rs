@@ -1,10 +1,11 @@
-use std::collections::VecDeque;
+use std::{collections::VecDeque, fs};
 use std::thread;
 use std::time::Duration;
 use cliclack::{self, intro, input};
 mod crawler;
+use scraper::error;
 use tokio;
-
+mod sql;
 #[tokio::main]
 
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -22,10 +23,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     sites_list_to_visit.push_back(desired_site_to_fetch);
     thread::sleep(Duration::from_millis(500));
     while let Some(url) = sites_list_to_visit.pop_front() {
-        let sites = crawler::spider(url).await?;
-        for site in sites {
-            println!("-{}", site);
-            sites_list_to_visit.push_back(site);
+        let fetch_sites = crawler::spider(url).await;
+        match fetch_sites{
+            Ok(sites) => {
+                for site in sites {
+                    println!("-{}", site);
+                    sites_list_to_visit.push_back(site.clone());
+                    let database = String::from("src/urls.db");
+                    sql::insert_data(database, site);
+
+                }
+            }
+            Err(error) => {
+                sites_list_to_visit.pop_front();
+                fs::write("error.txt", error.to_string());
+            }
         }
     }
     Ok(())

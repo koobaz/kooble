@@ -10,6 +10,7 @@ pub async fn spider(site_zero: String) -> Result<HashSet<String>, Box<dyn std::e
 
     let body: String = ureq::get(site_zero.clone())
     .header("Example-Header", "header value")
+    .header("User-Agent", "KoobleBot/0.1")
     .call()? 
     .body_mut()
     .read_to_string()?;
